@@ -11,26 +11,27 @@ import javax.servlet.http.HttpSessionListener;
 @WebListener
 public class SessionCounter implements HttpSessionListener {
 
-	
 	private static int active = 0;
 
 	/**
-     * @see HttpSessionListener#sessionCreated(HttpSessionEvent)
-     */
-    public void sessionCreated(HttpSessionEvent arg0)  { 
-         active++;
-         }
+	 * @see HttpSessionListener#sessionCreated(HttpSessionEvent)
+	 */
+	public void sessionCreated(HttpSessionEvent arg0) {
+		synchronized (arg0.getSession()) {
+			active++;
+		}
+	}
 
 	/**
-     * @see HttpSessionListener#sessionDestroyed(HttpSessionEvent)
-     */
-    public void sessionDestroyed(HttpSessionEvent arg0)  { 
-    	if(active > 0)
-    		active--;
-    }
-    
-    public static int getActiveSessions() {
-        return active;
-      }
-	
+	 * @see HttpSessionListener#sessionDestroyed(HttpSessionEvent)
+	 */
+	public void sessionDestroyed(HttpSessionEvent arg0) {
+		if (active > 0)
+			active--;
+	}
+
+	public static int getActiveSessions() {
+		return active;
+	}
+
 }
